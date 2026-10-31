@@ -30,7 +30,6 @@ export function EvidenceForm() {
 
   return (
     <form className="stack" onSubmit={submit}>
-      <h2>Add market evidence</h2>
       <label className="field">
         Country
         <select name="country" required>

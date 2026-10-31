@@ -61,7 +61,9 @@ export function useRadar() {
     setCanReplay(e instanceof ApiFailure && e.canReplay);
   };
 
-  const analyze = useCallback(async (files: File[]) => {
+  // Takes book page images for the Book Reader, or tags the seller typed in, which skip it.
+  const analyze = useCallback(async (input: File[] | BookTags) => {
+    const files = Array.isArray(input) ? input : [];
     const run = runGuard.current.next();
     kitGuard.current.next();
     const baseline = resultsForNewRun(latest.current.results, latest.current.replayedOn !== null);
@@ -72,22 +74,27 @@ export function useRadar() {
     setReplayedOn(null);
     setReplayIsDummy(false);
     setKit(null);
-    setStatuses({ ...IDLE, reader: 'running' });
+    setStatuses({ ...IDLE, reader: files.length > 0 ? 'running' : 'done' });
     let step: keyof Statuses = 'reader';
     let book: BookTags | null = null;
     let prior: BookResult | undefined;
     const fits: CountryFit[] = [];
     try {
-      const form = new FormData();
-      files.forEach((f) => form.append('pages', f));
-      const read = await call<{ book: BookTags }>('/api/book', { method: 'POST', body: form });
-      if (!runGuard.current.isCurrent(run)) return;
-      if (!read.book.readable) {
-        setStatuses({ ...IDLE, reader: 'failed' });
-        setError("We couldn't read this page. Try a clearer photo of a book page.");
-        return;
+      let tags: BookTags;
+      if (Array.isArray(input)) {
+        const form = new FormData();
+        files.forEach((f) => form.append('pages', f));
+        const read = await call<{ book: BookTags }>('/api/book', { method: 'POST', body: form });
+        if (!runGuard.current.isCurrent(run)) return;
+        if (!read.book.readable) {
+          setStatuses({ ...IDLE, reader: 'failed' });
+          setError("We couldn't read this page. Try a clearer photo of a book page.");
+          return;
+        }
+        tags = withDisplayTitle(read.book, files[0].name);
+      } else {
+        tags = input;
       }
-      const tags = withDisplayTitle(read.book, files[0].name);
       book = tags;
       prior = baseline.find((r) => r.tags.title === tags.title);
       pageFiles.current.set(tags.title, files);

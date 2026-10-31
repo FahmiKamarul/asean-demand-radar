@@ -12,18 +12,19 @@ export function UploadPanel({ busy, onAnalyze }: { busy: boolean; onAnalyze: (fi
 
   return (
     <form className="stack" onSubmit={submit}>
-      <h2>Add a book</h2>
-      <label className="field">
-        Cover or sample pages
+      <label className="dropzone">
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
           multiple
           onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
         />
+        <span className="dropzone-title">
+          {files.length > 0 ? `${files.length} page${files.length === 1 ? '' : 's'} chosen` : 'Choose book pages'}
+        </span>
+        <span className="muted">Cover or a recipe page. JPG, PNG or WebP, up to 5 images of 8 MB each.</span>
       </label>
-      <p className="muted">JPG, PNG or WebP, up to 5 images of 8 MB each.</p>
-      <button className="btn" disabled={busy || files.length === 0}>
+      <button className="btn btn-block" disabled={busy || files.length === 0}>
         {busy ? 'Agents are working…' : 'Find best-fit countries'}
       </button>
     </form>

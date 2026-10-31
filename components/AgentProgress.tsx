@@ -1,41 +1,25 @@
 import type { AgentStatus } from '@/lib/radarState';
 
-const WORDS: Record<AgentStatus, string> = {
-  waiting: 'Waiting',
-  running: 'Working…',
-  done: 'Done',
-  failed: 'Stopped',
-};
-
 type Props = {
   statuses: { reader: AgentStatus; matcher: AgentStatus; localizer: AgentStatus };
   matching: string | null;
 };
 
+// One line instead of a list: which agent is working now, and how far along the run is.
 export function AgentProgress({ statuses, matching }: Props) {
   const agents = [
-    { name: 'Book Reader', job: 'Tags the book from its pages', status: statuses.reader, note: null },
-    {
-      name: 'Market Matcher', job: 'Compares the book with sourced evidence', status: statuses.matcher,
-      note: matching ? `Checking ${matching}…` : null,
-    },
-    { name: 'Localizer', job: 'Drafts the test kit', status: statuses.localizer, note: null },
+    { name: 'Book Reader', status: statuses.reader, note: 'reading the book' },
+    { name: 'Market Matcher', status: statuses.matcher, note: matching ? `checking ${matching}` : 'comparing with evidence' },
+    { name: 'Localizer', status: statuses.localizer, note: 'drafting the test kit' },
   ];
+  const active = agents.find((a) => a.status === 'running') ?? agents.find((a) => a.status === 'failed');
+  if (!active) return null;
+  const done = agents.filter((a) => a.status === 'done').length;
   return (
-    <section className="stack" aria-live="polite">
-      <h2>Agents</h2>
-      <ol className="agents">
-        {agents.map((a) => (
-          <li key={a.name} className={`agent agent-${a.status}`}>
-            <span className="agent-dot" aria-hidden="true" />
-            <span className="agent-name">
-              {a.name}
-              <span className="agent-state">{a.note ?? `${WORDS[a.status]}: ${a.job.toLowerCase()}`}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
-      <p className="muted">Plain code calculates each score from Gemma&apos;s taste match, the seller&apos;s reach and the cited sources.</p>
-    </section>
+    <p className={`progress progress-${active.status}`} aria-live="polite">
+      <span className="agent-dot" aria-hidden="true" />
+      {active.status === 'failed' ? `${active.name} stopped` : `${active.name}: ${active.note}…`}
+      <span className="muted"> {done}/3</span>
+    </p>
   );
 }
