@@ -23,7 +23,7 @@ async function main() {
   for (const c of countries) fits.push(await matchCountry(book, c, evidence, now));
   const best = [...fits].sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
   if (best.score === null) throw new Error('No evidence yet, so there is nothing to replay. Add sourced evidence first.');
-  const kit = await buildTestKit(book, countries.find((c) => c.code === best.country)!, best.suggestedAngle, image);
+  const kit = await buildTestKit(book, countries.find((c) => c.code === best.country)!, best.suggestedAngle, [image]);
 
   await mkdir(path.join('data', 'replay'), { recursive: true });
   await writeFile(

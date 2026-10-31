@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Bricolage_Grotesque, IBM_Plex_Sans } from 'next/font/google';
 import Link from 'next/link';
+import { RadarShell } from '@/components/RadarShell';
 import './globals.css';
 
 const display = Bricolage_Grotesque({ variable: '--font-display', subsets: ['latin'] });
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <Link href="/dashboard">Results</Link>
           </nav>
         </header>
-        {children}
+        <RadarShell>{children}</RadarShell>
       </body>
     </html>
   );

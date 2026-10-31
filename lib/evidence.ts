@@ -1,12 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
+import { withFileLock, writeJsonAtomic } from './jsonStore';
 import { CountrySchema, EvidenceSchema, type Country, type Evidence } from './types';
 
 const evidenceFile = () => process.env.EVIDENCE_FILE ?? path.join(process.cwd(), 'data', 'evidence.json');
 
-export async function readEvidence(): Promise<Evidence[]> {
+async function readAll(): Promise<Evidence[]> {
   try {
     return z.array(EvidenceSchema).parse(JSON.parse(await readFile(evidenceFile(), 'utf8')));
   } catch (e) {
@@ -15,10 +16,16 @@ export async function readEvidence(): Promise<Evidence[]> {
   }
 }
 
-export async function addEvidence(item: Omit<Evidence, 'id'>): Promise<Evidence> {
-  const saved = EvidenceSchema.parse({ ...item, id: randomUUID() });
-  await writeFile(evidenceFile(), JSON.stringify([...(await readEvidence()), saved], null, 2));
-  return saved;
+export function readEvidence(): Promise<Evidence[]> {
+  return withFileLock(readAll);
+}
+
+export function addEvidence(item: Omit<Evidence, 'id'>): Promise<Evidence> {
+  return withFileLock(async () => {
+    const saved = EvidenceSchema.parse({ ...item, id: randomUUID() });
+    await writeJsonAtomic(evidenceFile(), [...(await readAll()), saved]);
+    return saved;
+  });
 }
 
 export async function getCountries(): Promise<Country[]> {

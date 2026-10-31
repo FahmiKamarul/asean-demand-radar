@@ -15,7 +15,7 @@ export function Heatmap({ results, selected, onSelect }: Props) {
   return (
     <table className="heatmap">
       <caption className="muted" style={{ textAlign: 'left', padding: '0 6px 6px' }}>
-        Demand signal out of 100, based on the saved evidence. A guide for what to test, not a market prediction.
+        Demand signal out of 100, based on the saved evidence. Use it to choose a recommended test.
       </caption>
       <thead>
         <tr>
@@ -30,7 +30,13 @@ export function Heatmap({ results, selected, onSelect }: Props) {
             {COUNTRIES.map((c) => {
               const fit = r.fits.find((f) => f.country === c.code);
               if (!fit) {
-                return <td key={c.code}><div className="heat heat-pending"><span className="heat-label">Checking…</span></div></td>;
+                return (
+                  <td key={c.code}>
+                    <div className="heat heat-pending">
+                      <span className="heat-label">{r.incomplete ? 'not checked' : 'Checking…'}</span>
+                    </div>
+                  </td>
+                );
               }
               const isSelected = selected?.title === r.tags.title && selected.country === c.code;
               return (

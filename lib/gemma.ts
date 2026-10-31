@@ -29,7 +29,7 @@ export const defaultGenerate: Generate = async (parts) => {
     throw new GemmaError('unavailable', 'Set GEMINI_API_KEY and GEMMA_MODEL in .env.local.');
   }
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey, httpOptions: { timeout: 60000 } });
     // Instructions go in the user prompt because Gemma support for system instructions and JSON mode is unconfirmed.
     const res = await ai.models.generateContent({ model, contents: [{ role: 'user', parts }] });
     return res.text ?? '';
@@ -54,5 +54,6 @@ export async function generateJson<T>(
       lastError = e;
     }
   }
-  throw new GemmaError('bad_output', `Gemma returned an unusable reply: ${String(lastError)}`);
+  console.error('Unusable Gemma reply:', lastError);
+  throw new GemmaError('bad_output', "Gemma's reply couldn't be used. Please try again.");
 }

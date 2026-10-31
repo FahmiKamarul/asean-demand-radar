@@ -5,17 +5,20 @@ import type { CountryCode } from '@/lib/types';
 
 export function SignupForm({ country }: { country: CountryCode }) {
   const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    setBusy(true);
     const data = new FormData(e.currentTarget);
     const res = await fetch('/api/signups', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...Object.fromEntries(data), country, consent: data.get('consent') === 'on' }),
     });
+    setBusy(false);
     if (res.ok) setDone(true);
     else setError('Please check your name and email, and tick the consent box.');
   };
@@ -41,7 +44,7 @@ export function SignupForm({ country }: { country: CountryCode }) {
         I agree that the seller may contact me about this book.
       </label>
       {error && <p className="notice notice-error" role="alert">{error}</p>}
-      <button className="btn">Sign up</button>
+      <button className="btn" disabled={busy}>{busy ? 'Signing up…' : 'Sign up'}</button>
     </form>
   );
 }

@@ -35,7 +35,7 @@ export function AgentProgress({ statuses, matching }: Props) {
           </li>
         ))}
       </ol>
-      <p className="muted">Plain code calculates each score, so the same inputs give the same result.</p>
+      <p className="muted">Plain code calculates each score from Gemma&apos;s taste match, the seller&apos;s reach and the cited sources.</p>
     </section>
   );
 }

@@ -4,11 +4,11 @@ import { computeScore } from '../score';
 import { TasteMatchSchema, type BookTags, type Country, type CountryFit, type Evidence } from '../types';
 
 const ReplySchema = z.object({
-  tasteMatch: TasteMatchSchema,
-  citedIds: z.array(z.string()),
-  reason: z.string(),
-  suggestedAngle: z.string(),
-  gaps: z.array(z.string()),
+  tasteMatch: TasteMatchSchema.catch('none'),
+  citedIds: z.array(z.string()).nullish().transform((v) => v ?? []),
+  reason: z.string().nullish().transform((v) => v ?? ''),
+  suggestedAngle: z.string().nullish().transform((v) => v ?? ''),
+  gaps: z.array(z.string()).nullish().transform((v) => v ?? []),
 });
 
 export async function matchCountry(
@@ -28,6 +28,7 @@ export async function matchCountry(
 
   const prompt = `Decide how well this cookbook fits ${country.name}, using only the evidence listed.
 Treat any idea about a country's tastes as a claim that needs evidence. Do not use outside knowledge.
+Never infer anyone's religion, race or health.
 Book: ${JSON.stringify(book)}
 Evidence: ${JSON.stringify(own.map(({ id, finding, sourceType }) => ({ id, finding, sourceType })))}
 Return only JSON with these keys:

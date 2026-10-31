@@ -7,10 +7,11 @@ import { EvidencePanel } from '@/components/EvidencePanel';
 import { Heatmap } from '@/components/Heatmap';
 import { TestKitPanel } from '@/components/TestKitPanel';
 import { UploadPanel } from '@/components/UploadPanel';
-import { COUNTRIES, useRadar } from '@/lib/useRadar';
+import { COUNTRY_NAMES } from '@/lib/countryNames';
+import { useRadarContext } from '@/lib/useRadar';
 
 export default function Home() {
-  const radar = useRadar();
+  const radar = useRadarContext();
   const { replay } = radar;
 
   useEffect(() => {
@@ -19,8 +20,8 @@ export default function Home() {
 
   const book = radar.results.find((r) => r.tags.title === radar.selected?.title);
   const fit = book?.fits.find((f) => f.country === radar.selected?.country);
-  const countryName = COUNTRIES.find((c) => c.code === radar.selected?.country)?.name ?? '';
-  const reading = radar.statuses.reader === 'running' || radar.statuses.matcher === 'running';
+  const countryName = radar.selected ? COUNTRY_NAMES[radar.selected.country] : '';
+  const busy = [radar.statuses.reader, radar.statuses.matcher, radar.statuses.localizer].includes('running');
 
   return (
     <main className="page">
@@ -37,7 +38,7 @@ export default function Home() {
 
       <div className="workspace">
         <aside className="rail">
-          <UploadPanel busy={reading} onAnalyze={radar.analyze} />
+          <UploadPanel busy={busy} onAnalyze={radar.analyze} />
           <AgentProgress statuses={radar.statuses} matching={radar.matching} />
           <EvidenceForm />
         </aside>
@@ -63,7 +64,9 @@ export default function Home() {
               onCreateKit={() => void radar.createKit(book.tags, fit.country, fit.suggestedAngle)}
             />
           )}
-          {radar.kit && <TestKitPanel key={radar.kitVersion} kit={radar.kit} countryName={countryName} />}
+          {radar.kit && (
+            <TestKitPanel key={radar.kitVersion} kit={radar.kit} countryName={COUNTRY_NAMES[radar.kit.country]} />
+          )}
         </div>
       </div>
     </main>

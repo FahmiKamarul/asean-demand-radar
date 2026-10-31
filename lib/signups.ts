@@ -1,6 +1,7 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
+import { withFileLock, writeJsonAtomic } from './jsonStore';
 import { CountryCodeSchema, type CountryCode } from './types';
 
 export const SignupSchema = z.object({
@@ -27,11 +28,11 @@ async function readSignups(): Promise<Signup[]> {
 
 export async function addSignup(input: unknown): Promise<void> {
   const signup = SignupSchema.parse(input);
-  await writeFile(signupsFile(), JSON.stringify([...(await readSignups()), signup], null, 2));
+  await withFileLock(async () => writeJsonAtomic(signupsFile(), [...(await readSignups()), signup]));
 }
 
 export async function countByCountry(): Promise<Record<CountryCode, number>> {
   const counts: Record<CountryCode, number> = { ID: 0, PH: 0, TH: 0 };
-  for (const s of await readSignups()) counts[s.country] += 1;
+  for (const s of await withFileLock(readSignups)) counts[s.country] += 1;
   return counts;
 }

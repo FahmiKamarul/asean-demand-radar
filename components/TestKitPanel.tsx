@@ -68,7 +68,7 @@ export function TestKitPanel({ kit, countryName }: { kit: TestKit; countryName: 
           {copied ? 'Copied' : 'Copy test kit'}
         </button>
         {showLink ? (
-          <a href={kit.signupPath}>Open sign-up page</a>
+          <a href={kit.signupPath} target="_blank" rel="noreferrer">Open sign-up page</a>
         ) : (
           <span className="muted">Approve the content to copy it and get the sign-up link.</span>
         )}

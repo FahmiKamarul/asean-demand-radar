@@ -24,7 +24,7 @@ export function UploadPanel({ busy, onAnalyze }: { busy: boolean; onAnalyze: (fi
       </label>
       <p className="muted">JPG, PNG or WebP, up to 5 images of 8 MB each.</p>
       <button className="btn" disabled={busy || files.length === 0}>
-        {busy ? 'Reading the book…' : 'Find best-fit countries'}
+        {busy ? 'Agents are working…' : 'Find best-fit countries'}
       </button>
     </form>
   );

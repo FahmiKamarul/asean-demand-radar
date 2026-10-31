@@ -10,10 +10,10 @@ export async function POST(req: Request) {
     const book = BookTagsSchema.parse(JSON.parse(String(form.get('book'))));
     const code = CountryCodeSchema.parse(form.get('country'));
     const angle = String(form.get('angle') ?? '');
-    const page = form.get('page');
-    const pageImage = page instanceof File ? (await filesToParts([page]))[0] : null;
+    const pages = form.getAll('pages') as File[];
+    const pageImages = pages.length > 0 ? await filesToParts(pages) : [];
     const country = (await getCountries()).find((c) => c.code === code)!;
-    return Response.json({ kit: await buildTestKit(book, country, angle, pageImage) });
+    return Response.json({ kit: await buildTestKit(book, country, angle, pageImages) });
   } catch (e) {
     return toErrorResponse(e);
   }

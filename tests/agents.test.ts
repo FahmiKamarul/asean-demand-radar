@@ -62,7 +62,7 @@ test('buildTestKit sets its own sign-up path and country', async () => {
     language: 'Indonesian', recipeTitle: 't', ingredients: ['a'], steps: ['b'], swaps: [],
     liveScript: 's', signupPath: '/evil', country: 'TH',
   });
-  const kit = await buildTestKit(book, indonesia, 'spicy', null, gen);
+  const kit = await buildTestKit(book, indonesia, 'spicy', [], gen);
   expect(kit.signupPath).toBe('/signup/ID');
   expect(kit.country).toBe('ID');
 });
