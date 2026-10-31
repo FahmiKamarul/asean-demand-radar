@@ -48,6 +48,7 @@ export function useRadar() {
   const [kit, setKit] = useState<TestKit | null>(null);
   const [kitVersion, setKitVersion] = useState(0);
   const [replayedOn, setReplayedOn] = useState<string | null>(null);
+  const [replayIsDummy, setReplayIsDummy] = useState(false);
   const pageFiles = useRef(new Map<string, File[]>());
   // Replies that arrive after the user has moved on are dropped, so a kit can't appear under the wrong market.
   const runGuard = useRef(createRequestGuard());
@@ -69,6 +70,7 @@ export function useRadar() {
     setError(null);
     setCanReplay(false);
     setReplayedOn(null);
+    setReplayIsDummy(false);
     setKit(null);
     setStatuses({ ...IDLE, reader: 'running' });
     let step: keyof Statuses = 'reader';
@@ -155,6 +157,7 @@ export function useRadar() {
     setKit(saved.kit);
     setKitVersion((v) => v + 1);
     setReplayedOn(saved.capturedOn);
+    setReplayIsDummy(saved.isDummy === true);
     setSelected({ title: saved.results[0].tags.title, country: saved.kit.country });
     setStatuses({ reader: 'done', matcher: 'done', localizer: 'done' });
   }, []);
@@ -167,7 +170,7 @@ export function useRadar() {
   }, []);
 
   return {
-    results, statuses, matching, error, canReplay, selected, kit, kitVersion, replayedOn,
+    results, statuses, matching, error, canReplay, selected, kit, kitVersion, replayedOn, replayIsDummy,
     analyze, createKit, replay, select,
   };
 }

@@ -22,6 +22,10 @@ Run a book again after adding evidence to update its scores.
 
 Run `npx tsx --env-file=.env.local scripts/save-replay.ts <page image>`, which needs evidence to exist. Open `/?replay=1` to play it. The app always labels a replay, and offers it after an API failure.
 
+## Rehearsing with dummy data
+
+Before real evidence or a Gemini key is ready, run `npx tsx scripts/make-dummy-replay.ts` and open `/?replay=1`. Every item it writes is made up. The banner says so, each source starts with `DUMMY:`, and its links go to example.com. Don't commit the `data/replay/demo.json` it writes. Replace it with `save-replay.ts` once real evidence is loaded.
+
 ## Working today
 
 Book reading, evidence reading, scoring, the heatmap, sources, test kit with approval, sign-up form, real sign-up counts and sample results.
