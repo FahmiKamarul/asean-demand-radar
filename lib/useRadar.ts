@@ -48,6 +48,7 @@ export function useRadar() {
   const [kit, setKit] = useState<TestKit | null>(null);
   const [kitVersion, setKitVersion] = useState(0);
   const [replayedOn, setReplayedOn] = useState<string | null>(null);
+  const [replayIsDummy, setReplayIsDummy] = useState(false);
   const pageFiles = useRef(new Map<string, File[]>());
   // Replies that arrive after the user has moved on are dropped, so a kit can't appear under the wrong market.
   const runGuard = useRef(createRequestGuard());
@@ -60,7 +61,9 @@ export function useRadar() {
     setCanReplay(e instanceof ApiFailure && e.canReplay);
   };
 
-  const analyze = useCallback(async (files: File[]) => {
+  // Takes book page images for the Book Reader, or tags the seller typed in, which skip it.
+  const analyze = useCallback(async (input: File[] | BookTags) => {
+    const files = Array.isArray(input) ? input : [];
     const run = runGuard.current.next();
     kitGuard.current.next();
     const baseline = resultsForNewRun(latest.current.results, latest.current.replayedOn !== null);
@@ -69,23 +72,29 @@ export function useRadar() {
     setError(null);
     setCanReplay(false);
     setReplayedOn(null);
+    setReplayIsDummy(false);
     setKit(null);
-    setStatuses({ ...IDLE, reader: 'running' });
+    setStatuses({ ...IDLE, reader: files.length > 0 ? 'running' : 'done' });
     let step: keyof Statuses = 'reader';
     let book: BookTags | null = null;
     let prior: BookResult | undefined;
     const fits: CountryFit[] = [];
     try {
-      const form = new FormData();
-      files.forEach((f) => form.append('pages', f));
-      const read = await call<{ book: BookTags }>('/api/book', { method: 'POST', body: form });
-      if (!runGuard.current.isCurrent(run)) return;
-      if (!read.book.readable) {
-        setStatuses({ ...IDLE, reader: 'failed' });
-        setError("We couldn't read this page. Try a clearer photo of a book page.");
-        return;
+      let tags: BookTags;
+      if (Array.isArray(input)) {
+        const form = new FormData();
+        files.forEach((f) => form.append('pages', f));
+        const read = await call<{ book: BookTags }>('/api/book', { method: 'POST', body: form });
+        if (!runGuard.current.isCurrent(run)) return;
+        if (!read.book.readable) {
+          setStatuses({ ...IDLE, reader: 'failed' });
+          setError("We couldn't read this page. Try a clearer photo of a book page.");
+          return;
+        }
+        tags = withDisplayTitle(read.book, files[0].name);
+      } else {
+        tags = input;
       }
-      const tags = withDisplayTitle(read.book, files[0].name);
       book = tags;
       prior = baseline.find((r) => r.tags.title === tags.title);
       pageFiles.current.set(tags.title, files);
@@ -155,6 +164,7 @@ export function useRadar() {
     setKit(saved.kit);
     setKitVersion((v) => v + 1);
     setReplayedOn(saved.capturedOn);
+    setReplayIsDummy(saved.isDummy === true);
     setSelected({ title: saved.results[0].tags.title, country: saved.kit.country });
     setStatuses({ reader: 'done', matcher: 'done', localizer: 'done' });
   }, []);
@@ -167,7 +177,7 @@ export function useRadar() {
   }, []);
 
   return {
-    results, statuses, matching, error, canReplay, selected, kit, kitVersion, replayedOn,
+    results, statuses, matching, error, canReplay, selected, kit, kitVersion, replayedOn, replayIsDummy,
     analyze, createKit, replay, select,
   };
 }

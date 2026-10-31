@@ -1,1 +1,78 @@
-[]
+[
+  {
+    "id": "cab9291c-1bb3-4505-b6d2-1defcce6cc0d",
+    "country": "ID",
+    "sourceType": "search_interest",
+    "finding": "Google Year in Search 2025 Indonesia recipe list: resep matcha first, then rempeyek kacang tanah, cabe gendot, es teler creamy, udang keju, bolu kukus ketan hitam, sop buntut sapi, ayam goreng kipas, coto Makassar and dendeng batokok. Savoury home dishes dominate the list.",
+    "sourceUrl": "https://www.antaranews.com/berita/5287366/daftar-kata-kunci-teratas-dalam-pencarian-di-google-selama-2025",
+    "collectedOn": "2026-10-31",
+    "originalLanguage": "Indonesian"
+  },
+  {
+    "id": "7c5846f5-47a5-4da6-b44f-fdaa6ebfae73",
+    "country": "ID",
+    "sourceType": "search_interest",
+    "finding": "Google Indonesia reports that during 2025 Indonesians searched for which \"resep matcha\" (matcha recipe) idea was the tastiest.",
+    "sourceUrl": "https://blog.google/intl/id-id/products/explore-get-answers/year-in-search-2025-dari-padel-yapping-sampai-pica-pica-inilah-berbagai-tren-yang-menggemparkan-indonesia/",
+    "collectedOn": "2026-10-31",
+    "originalLanguage": "Indonesian"
+  },
+  {
+    "id": "733c34c6-3d93-464e-9dc0-df2e238654fd",
+    "country": "ID",
+    "sourceType": "content",
+    "finding": "Ipsos social listening for Ramadan 2025 in Indonesia: culinary topics were among the most popular, with practical cooking trends such as meal kits and DIY recipes.",
+    "sourceUrl": "https://www.ipsos.com/en-id/ramadan-treats-id-2025",
+    "collectedOn": "2026-10-31"
+  },
+  {
+    "id": "b8f27fb2-a929-40a6-801d-3d8f8ecae9a1",
+    "country": "PH",
+    "sourceType": "content",
+    "finding": "Euromonitor (December 2025): in the Philippines, the home cooking trend supports brand expansion in sauces, dips and condiments.",
+    "sourceUrl": "https://www.euromonitor.com/cooking-ingredients-and-meals-in-the-philippines/report",
+    "collectedOn": "2026-10-31"
+  },
+  {
+    "id": "db42a9ee-79f8-4bde-ae87-5bf4a2252c1a",
+    "country": "PH",
+    "sourceType": "search_interest",
+    "finding": "Google data for April 2020 (pandemic lockdown, older evidence): Filipinos' top recipe searches were carbonara, maja blanca, pancake, banana cake, puto, menudo, leche flan, pandesal, chicken curry and dalgona coffee.",
+    "sourceUrl": "https://www.gmanetwork.com/news/lifestyle/food/737943/10-dishes-filipinos-wanted-to-learn-how-to-make-amid-lockdown-according-to-google/story",
+    "collectedOn": "2026-10-31"
+  },
+  {
+    "id": "d132c7c0-7ff0-4c4c-bfed-922a08ca6d3f",
+    "country": "TH",
+    "sourceType": "content",
+    "finding": "Kantar Worldpanel (November 2024): cooking is still core to daily life in Thailand, but households cook less often than before lockdown and choose simpler recipes.",
+    "sourceUrl": "https://www.kantar.com/inspiration/fmcg/decoding-trends-and-drivers-in-thailands-evolving-food-market",
+    "collectedOn": "2026-10-31"
+  },
+  {
+    "id": "bfa313ca-51ca-4a7b-bfc0-c5d31ddd655b",
+    "country": "TH",
+    "sourceType": "content",
+    "finding": "Kantar Worldpanel (November 2024): Thai shoppers choose snacks and convenience items over cooking staples, and takeaway is growing in urban areas.",
+    "sourceUrl": "https://www.kantar.com/inspiration/fmcg/decoding-trends-and-drivers-in-thailands-evolving-food-market",
+    "collectedOn": "2026-10-31"
+  },
+  {
+    "id": "ad4f2373-e46d-4536-aaa1-39581e33725f",
+    "country": "TH",
+    "sourceType": "search_interest",
+    "finding": "Google Thailand Year in Search 2025: recipes and how-to searches (\"สูตรอาหาร วิธีทำ\") were among popular search activities.",
+    "sourceUrl": "https://blog.google/intl/th-th/products/consumer-products/year-in-search-2025/",
+    "collectedOn": "2026-10-31",
+    "originalLanguage": "Thai"
+  },
+  {
+    "id": "254fd14e-4754-4655-b37c-1af2cf731d6f",
+    "country": "TH",
+    "sourceType": "search_interest",
+    "finding": "Google Year in Search 2024 Thailand, as reported by Marketing Oops: Thai users searched for recipes, especially desserts and Thai dishes.",
+    "sourceUrl": "https://www.marketingoops.com/uncategorized/google-trends-year-in-search-2024/",
+    "collectedOn": "2026-10-31",
+    "originalLanguage": "Thai"
+  }
+]
