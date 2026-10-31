@@ -11,7 +11,7 @@ export default async function SignupPage({ params }: { params: Promise<{ country
     <main className="page narrow">
       <div className="intro">
         <h1>Get a free recipe sample</h1>
-        <p>Tell us what you like to cook in {NAMES[parsed.data]}, and we&apos;ll send you recipes that suit you.</p>
+        <p>For cooks in {NAMES[parsed.data]}. Tell us what you like to cook, and we&apos;ll send you a sample recipe.</p>
       </div>
       <SignupForm country={parsed.data} />
     </main>

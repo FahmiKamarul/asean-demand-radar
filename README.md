@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASEAN Demand Radar
 
-## Getting Started
+Shows which book to test in which ASEAN country, with sources, then drafts a test kit for a person to approve. This is a hackathon prototype that runs on one machine.
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Run `npm install`.
+2. Copy `.env.example` to `.env.local` and add your `GEMINI_API_KEY`.
+3. Run `npx tsx --env-file=.env.local scripts/check-model.ts` to list Gemma models. Set `GEMMA_MODEL` to the Gemma 4 model, then run it again to test access.
+4. Run `npm run dev` and open http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Adding evidence
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app has no market data until you add sourced evidence. Never add a finding without a real source.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Screenshot:** use **Add market evidence** in the app. Crop out usernames and faces first.
+- **Google Trends:** download the country CSV, then run `npx tsx scripts/import-trends.ts <csv file> "<search term>" <source link>`. Trends scores are relative interest, not search counts.
 
-## Learn More
+Run a book again after adding evidence to update its scores.
 
-To learn more about Next.js, take a look at the following resources:
+## Saving a replay for the demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run `npx tsx --env-file=.env.local scripts/save-replay.ts <page image>`, which needs evidence to exist. Open `/?replay=1` to play it. The app always labels a replay, and offers it after an API failure.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Working today
 
-## Deploy on Vercel
+Book reading, evidence reading, scoring, the heatmap, sources, test kit with approval, sign-up form, real sign-up counts and sample results.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Planned
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Live data feeds, live comment analysis, real sales tracking, learning from results, other businesses and Startup ASEAN reporting.
+
+## Limits
+
+- Evidence and sign-ups are stored as local files, so the sign-up link needs hosting and a real database before the seller can share it publicly.
+- Numbers under **Sample data for illustration** on the Results page are made up.
+- Scoring weights in `lib/score.ts` and reach values in `data/countries.json` are starting defaults for the team to adjust.
