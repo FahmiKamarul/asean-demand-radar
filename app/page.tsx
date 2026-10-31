@@ -1,95 +1,71 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import { useEffect } from 'react';
+import { AgentProgress } from '@/components/AgentProgress';
+import { EvidenceForm } from '@/components/EvidenceForm';
+import { EvidencePanel } from '@/components/EvidencePanel';
+import { Heatmap } from '@/components/Heatmap';
+import { TestKitPanel } from '@/components/TestKitPanel';
+import { UploadPanel } from '@/components/UploadPanel';
+import { COUNTRIES, useRadar } from '@/lib/useRadar';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const radar = useRadar();
+  const { replay } = radar;
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('replay')) void replay();
+  }, [replay]);
+
+  const book = radar.results.find((r) => r.tags.title === radar.selected?.title);
+  const fit = book?.fits.find((f) => f.country === radar.selected?.country);
+  const countryName = COUNTRIES.find((c) => c.code === radar.selected?.country)?.name ?? '';
+  const reading = radar.statuses.reader === 'running' || radar.statuses.matcher === 'running';
+
+  return (
+    <main className="page">
+      <div className="intro">
+        <h1>Which book should you test in which country?</h1>
+        <p>Upload a book page, compare it with sourced market evidence, then create a test kit for the best fit.</p>
+      </div>
+
+      {radar.replayedOn && (
+        <p className="notice notice-warn" role="status" style={{ marginBottom: 24 }}>
+          Replaying a saved result from {radar.replayedOn}
+        </p>
+      )}
+
+      <div className="workspace">
+        <aside className="rail">
+          <UploadPanel busy={reading} onAnalyze={radar.analyze} />
+          <AgentProgress statuses={radar.statuses} matching={radar.matching} />
+          <EvidenceForm />
+        </aside>
+
+        <div className="main">
+          {radar.error && (
+            <div className="notice notice-error actions" role="alert">
+              <span>{radar.error}</span>
+              {radar.canReplay && (
+                <button type="button" className="btn btn-quiet" onClick={() => void radar.replay()}>
+                  Replay saved result
+                </button>
+              )}
+            </div>
+          )}
+          <Heatmap results={radar.results} selected={radar.selected} onSelect={radar.select} />
+          {book && fit && (
+            <EvidencePanel
+              book={book.tags}
+              fit={fit}
+              countryName={countryName}
+              kitBusy={radar.statuses.localizer === 'running'}
+              onCreateKit={() => void radar.createKit(book.tags, fit.country, fit.suggestedAngle)}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+          )}
+          {radar.kit && <TestKitPanel key={radar.kitVersion} kit={radar.kit} countryName={countryName} />}
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }

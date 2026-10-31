@@ -1,0 +1,8 @@
+{
+  "isSample": true,
+  "rows": [
+    { "country": "ID", "leads": 40, "replies": 12, "meetings": 3 },
+    { "country": "PH", "leads": 25, "replies": 7, "meetings": 2 },
+    { "country": "TH", "leads": 10, "replies": 2, "meetings": 0 }
+  ]
+}
