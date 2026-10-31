@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Bricolage_Grotesque, IBM_Plex_Sans } from 'next/font/google';
+import { Archivo, Big_Shoulders } from 'next/font/google';
 import Link from 'next/link';
 import { RadarShell } from '@/components/RadarShell';
 import './globals.css';
 
-const display = Bricolage_Grotesque({ variable: '--font-display', subsets: ['latin'] });
-const body = IBM_Plex_Sans({ variable: '--font-body', subsets: ['latin'], weight: ['400', '500', '600'] });
+const display = Big_Shoulders({ variable: '--font-display', subsets: ['latin'], weight: ['700', '900'] });
+const body = Archivo({ variable: '--font-body', subsets: ['latin'], weight: ['400', '600', '800'] });
 
 export const metadata: Metadata = {
   title: 'ASEAN Demand Radar',
