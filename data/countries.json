@@ -1,0 +1,5 @@
+[
+  { "code": "ID", "name": "Indonesia", "language": "Indonesian", "reach": 0.8, "reachReason": "Malay and Indonesian are close, so this is the easiest step for the seller." },
+  { "code": "PH", "name": "Philippines", "language": "Filipino and English", "reach": 0.7, "reachReason": "The seller may be able to run lives in English." },
+  { "code": "TH", "name": "Thailand", "language": "Thai", "reach": 0.3, "reachReason": "Likely needs Thai captions, a translator or a local host." }
+]
