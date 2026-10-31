@@ -68,7 +68,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes pulse { 50% { opacity: 0.3; } }
 
 .card { background: var(--board); border: var(--rule); border-radius: var(--radius); padding: 12px 14px; }
-details > summary { cursor: pointer; font-weight: 800; }
+details > summary { cursor: pointer; font-weight: 800; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: '+'; font-family: var(--font-display), sans-serif; font-weight: 900; font-size: 1.5rem; line-height: 1; }
+details[open] > summary::after { content: '\2212'; }
 details[open] > summary { margin-bottom: 8px; }
 
 .btn { border: 2px solid var(--act); background: var(--act); color: var(--board); border-radius: var(--radius); padding: 10px 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; transition: background 160ms var(--ease), transform 160ms var(--ease); }
