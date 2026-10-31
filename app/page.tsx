@@ -33,7 +33,7 @@ export default function Home() {
       {radar.replayedOn && (
         <p className="notice notice-warn" role="status" style={{ marginBottom: 24 }}>
           {radar.replayIsDummy
-            ? 'Dummy data for rehearsal. The book, evidence, sources and scores are made up.'
+            ? 'Dummy data for rehearsal. The market evidence, sources, scores and test kit are made up.'
             : `Replaying a saved result from ${radar.replayedOn}`}
         </p>
       )}
